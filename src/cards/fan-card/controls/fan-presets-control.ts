@@ -74,38 +74,6 @@ export class FanPresetsControl extends LitElement {
                 flex-direction: row;
                 flex: 1 0 auto;
             }
-
-            :host .mushroom-button-style button span:first-child {
-              font-size: 12px;
-            }
-
-            :host .mushroom-button-style button span:last-child {
-              font-size: 8px;
-            }
-
-            :host .mushroom-button-style button {
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              width: 100%;
-              height: 100%;
-              border: none;
-              background-color: var(--bg-color);
-              transition: background-color 280ms ease-in-out;
-              font-size: var(--control-height);
-              margin: 0;
-              padding: 0;
-              box-sizing: border-box;
-              line-height: 0;
-            }
-
-            :host .mushroom-button-style button {
-              width: 42px;
-            }
-            :host .mushroom-button-style {
-              flex: 0;
-            }
         `;
     }
 }
