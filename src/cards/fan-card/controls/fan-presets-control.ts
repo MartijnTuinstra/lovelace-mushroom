@@ -34,19 +34,18 @@ export class FanPresetsControl extends LitElement {
     }
 
     protected render(): TemplateResult {
-        const mode  = this.entity.attributes.preset_mode;
-        const modes = this.entity.attributes.preset_modes;
+        const attributes = this.entity.attributes;
+
+        const mode  = attributes.preset_mode == null ? "Unkown" : attributes.preset_mode;
+        const modes = attributes.preset_modes;
+
+        console.log("Preset: "+ mode);
 
         const fill = true;
         const rtl = false;
 
-        //return html`<ul>
-        //  ${map(this.entity.attributes.preset_modes, (item) => html`<li>${item}</li>`)}
-        //  </ul>
-        //`;
         return html`
           <mushroom-input-select
-            .label="Preset"
             .value=${mode}
             .disabled=${
               this.entity.state === "unavailable" /* UNKNWON state is allowed */
