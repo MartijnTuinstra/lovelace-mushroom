@@ -53,6 +53,10 @@ cards:
         name: Collapsible controls
         show_percentage_control: true
         collapsible_controls: true
+      - type: custom:mushroom-fan-card
+        entity: fan.preset_only_limited_fan
+        name: Presets Fan
+        show_presets_control: true
     columns: 2
     square: false
   - type: vertical-stack

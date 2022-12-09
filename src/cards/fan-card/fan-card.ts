@@ -31,6 +31,7 @@ import { computeEntityPicture } from "../../utils/info";
 import { FAN_CARD_EDITOR_NAME, FAN_CARD_NAME, FAN_ENTITY_DOMAINS } from "./const";
 import "./controls/fan-oscillate-control";
 import "./controls/fan-percentage-control";
+import "./controls/fan-presets-control";
 import { FanCardConfig } from "./fan-card-config";
 import { getPercentage } from "./utils";
 
@@ -85,6 +86,9 @@ export class FanCard extends MushroomBaseCard implements LovelaceCard {
     @state()
     private percentage?: number;
 
+    @state()
+    private viewControl?: boolean = false;
+
     updatePercentage() {
         this.percentage = undefined;
         if (!this._config || !this.hass || !this._config.entity) return;
@@ -106,6 +110,10 @@ export class FanCard extends MushroomBaseCard implements LovelaceCard {
         handleAction(this, this.hass!, this._config!, ev.detail.action!);
     }
 
+    private _toggleControl() {
+      this.viewControl = !this.viewControl;
+    }
+
     protected render(): TemplateResult {
         if (!this._config || !this.hass || !this._config.entity) {
             return html``;
@@ -120,15 +128,21 @@ export class FanCard extends MushroomBaseCard implements LovelaceCard {
         const picture = computeEntityPicture(entity, appearance.icon_type);
 
         let stateDisplay = computeStateDisplay(this.hass.localize, entity, this.hass.locale);
+
         if (this.percentage != null) {
             stateDisplay = `${this.percentage}%`;
         }
 
         const rtl = computeRTL(this.hass);
 
+        const active = isActive(entity);
+
         const displayControls =
             (!this._config.collapsible_controls || isActive(entity)) &&
-            (this._config.show_percentage_control || this._config.show_oscillate_control);
+            (this._config.show_percentage_control || this._config.show_oscillate_control || this._config.show_presets_control);
+
+        const displaySlider = (this._config.show_percentage_control && (!this._config.show_presets_control    || !this.viewControl));
+        const displaySelect = (this._config.show_presets_control    && (!this._config.show_percentage_control ||  this.viewControl));
 
         return html`
             <ha-card class=${classMap({ "fill-container": appearance.fill_container })}>
@@ -148,8 +162,8 @@ export class FanCard extends MushroomBaseCard implements LovelaceCard {
                     </mushroom-state-item>
                     ${displayControls
                         ? html`
-                              <div class="actions" ?rtl=${rtl}>
-                                  ${this._config.show_percentage_control
+                              <div class="actions overflow" ?rtl=${rtl}>
+                                  ${displaySlider
                                       ? html`
                                             <mushroom-fan-percentage-control
                                                 .hass=${this.hass}
@@ -157,6 +171,23 @@ export class FanCard extends MushroomBaseCard implements LovelaceCard {
                                                 @current-change=${this.onCurrentPercentageChange}
                                             ></mushroom-fan-percentage-control>
                                         `
+                                      : null}
+                                  ${displaySelect
+                                      ? html`
+                                            <mushroom-fan-presets-control
+                                                .hass=${this.hass}
+                                                .entity=${entity}
+                                                .selected_preset=${0}
+                                            ></mushroom-fan-presets-control>
+                                        `
+                                      : null}
+                                  ${this._config.show_percentage_control && this._config.show_presets_control
+                                      ? html`
+                                        <mushroom-button
+                                           class=${classMap({ active: this.viewControl != null ? Boolean(this.viewControl) : false })}
+                                           .icon=${"mdi:form-dropdown"}
+                                           @click=${this._toggleControl}>
+                                        </mushroom-button>`
                                       : null}
                                   ${this._config.show_oscillate_control
                                       ? html`
@@ -218,8 +249,13 @@ export class FanCard extends MushroomBaseCard implements LovelaceCard {
                 mushroom-shape-icon ha-icon {
                     color: red !important;
                 }
-                mushroom-fan-percentage-control {
+                mushroom-fan-percentage-control,
+                mushroom-fan-presets-control {
                     flex: 1;
+                }
+                mushroom-button.active {
+                    --icon-color: rgb(var(--rgb-state-fan));
+                    --bg-color: rgba(var(--rgb-state-fan), 0.2);
                 }
             `,
         ];

@@ -14,7 +14,7 @@ import { loadHaComponents } from "../../utils/loader";
 import { FAN_CARD_EDITOR_NAME, FAN_ENTITY_DOMAINS } from "./const";
 import { FanCardConfig, fanCardConfigStruct } from "./fan-card-config";
 
-const FAN_LABELS = ["icon_animation", "show_percentage_control", "show_oscillate_control"];
+const FAN_LABELS = ["icon_animation", "show_percentage_control", "show_oscillate_control", "show_presets_control"];
 
 const computeSchema = memoizeOne((version: string, icon?: string): HaFormSchema[] => [
     { name: "entity", selector: { entity: { domain: FAN_ENTITY_DOMAINS } } },
@@ -34,6 +34,7 @@ const computeSchema = memoizeOne((version: string, icon?: string): HaFormSchema[
         schema: [
             { name: "show_percentage_control", selector: { boolean: {} } },
             { name: "show_oscillate_control", selector: { boolean: {} } },
+            { name: "show_presets_control", selector: { boolean: {} } },
             { name: "collapsible_controls", selector: { boolean: {} } },
         ],
     },

@@ -22,6 +22,10 @@ export const cardStyle = css`
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
     }
+
+    .actions.overflow {
+        overflow: visible;
+    }
     .actions::-webkit-scrollbar {
         background: transparent; /* Chrome/Safari/Webkit */
         height: 0px;

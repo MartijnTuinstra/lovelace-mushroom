@@ -63,7 +63,8 @@
             },
             "fan": {
                 "show_percentage_control": "Percentage control?",
-                "show_oscillate_control": "Oscillate control?"
+                "show_oscillate_control": "Oscillate control?",
+                "show_presets_control": "Presets control?"
             },
             "cover": {
                 "show_buttons_control": "Control buttons?",
